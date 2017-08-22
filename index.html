@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=Edge">
@@ -101,7 +101,7 @@
     </div>
 
     <section class="links">
-      <a href="github.com" target="_blank" class="button button-outline mb-small">github</a>
+      <a href="https://github.com/pentamania/jquery-slidePuzzlize" target="_blank" class="button button-outline mb-small">github</a>
     </section>
 
     <h4>使い方</h4>
@@ -145,7 +145,7 @@
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
 
-<script src="./jquery.slidePuzzlize.js"></script>
+<script src="./jquery.slidePuzzlize.min.js"></script>
 <script type="text/javascript">
 hljs.initHighlightingOnLoad();
 
@@ -165,8 +165,8 @@ $(document).ready(function(){
     var imgW = (ww*0.8 < img.width) ? ww*0.8: img.width;
     this
     .resize(imgW, img.height*(imgW/img.width))
-    .reset();
-    // this.shuffle();
+    // .reset();
+    this.shuffle();
 
     // クリア時
     this.on('match', function() {
