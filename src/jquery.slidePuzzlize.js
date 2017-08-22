@@ -206,7 +206,6 @@
                 position: "absolute",
                 maxWidth: "none",
               }),
-              // $('<span/>').attr('class', 'splz_number').text(pieceId + 1)
             );
           }
 
