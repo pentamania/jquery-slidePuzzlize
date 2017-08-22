@@ -154,7 +154,7 @@
         // ピースのサイズ・プロパティ
         var pWidth = cWidth / colNum;
         var pHeight = cHeight / rowNum;
-        var borderPx = 1; //pieceのボーダー幅
+        var borderPx = 1; // pieceのボーダー幅
         var pieceProp = {
           "width": pWidth + "px",
           "height": pHeight +"px",
@@ -169,6 +169,15 @@
         var voidPieceProp = $.extend({}, pieceProp, {
           visibility: "hidden"
         });
+        var pieceNode,
+            pVal,
+            pieceId,
+            originX, // 画像描画開始位置：X軸
+            originY, // 画像描画開始位置：Y軸
+            imgLeft, // css:leftをマイナスにすることで、左方向にずらす
+            imgTop, // css:topをマイナスにすることで、上方向にずらす
+            textureImg
+        ;
 
         img.width = cWidth;
         img.height = cHeight;
@@ -180,14 +189,19 @@
           }
         }
 
-        var pieceNode;
         for (var i=0, len=pArray.length; i < len; i++) {
-          var pVal = pArray[i];
-          var pieceId = uId + "_" + pVal;
-          var originX = pWidth * m[pVal][0]; // 画像描画開始位置：X軸
-          var originY = pHeight * m[pVal][1]; // 画像描画開始位置：Y軸
-          var imgLeft = -originX +"px"; //css:leftをマイナスにすることで、左方向にずらす
-          var imgTop = -originY +"px"; //css:topをマイナスにすることで、上方向にずらす
+          pVal = pArray[i];
+          pieceId = uId + "_" + pVal;
+          originX = pWidth * m[pVal][0];
+          originY = pHeight * m[pVal][1];
+          imgLeft = -originX +"px";
+          imgTop = -originY +"px";
+          textureImg = $(img.cloneNode(false)).css({
+            left: imgLeft,
+            top: imgTop,
+            position: "absolute",
+            maxWidth: "none",
+          });
 
           if (pieceId === spaceDOMid) {
             // 空ピース
@@ -199,14 +213,8 @@
             pieceNode = $('<div/>')
             .attr('id', pieceId)
             .css(pieceProp)
-            .append(
-              $(img.cloneNode(false)).css({
-                left: imgLeft,
-                top: imgTop,
-                position: "absolute",
-                maxWidth: "none",
-              }),
-            );
+            .append(textureImg)
+            ;
           }
 
           pieceNode.on('touchstart mousedown', tapHandler);
