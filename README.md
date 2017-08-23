@@ -1,6 +1,8 @@
 # jQuery.slidePuzzlize
 
 ## 概要
+![スクリーンショット](./screenshot.gif)
+
 好きな画像をスライドパズル化するネタ系jqueryプラグインです。
 
 jQuery3.x系（IE9+）に対応、IE8以下はサポート外です。
@@ -30,32 +32,37 @@ jQuery3.x系（IE9+）に対応、IE8以下はサポート外です。
 
 #### main.js
 ```js
-// 画像生成
 var img = document.createElement('img');
 img.src = "./assets/sample.jpg";
 
 // initialize
 var puzzle = $.slidePuzzlize({
-  selector: "#field",
-  col: 3,
+  selector: "#field", // パズルのコンテナとなる要素（省略可）
 });
 
 // 画像の適用
-puzzle.setImage(img);
+puzzle.setImage(img)
+.then(function() {
+
+  // シャッフルする
+  this.shuffle();
+});
 ```
 
 ## API
 
 ### Options (Properties)
+基本的にどれも省略可能
+
 Name | Type | Info
 --- | --- | ---
-selector | String | パズル化するセレクタ（#id | .class）を指定します。
-col | Number | パズルの行数を設定します
-row | Number | パズルの段数を設定します
-enableAnimation | Boolean | アニメーションを許可するかどうか設定します
-animateDuration | Number | スライドアニメーションのスピードを変えます。
-pieceOpacity | Number | マッチしてないピースの透明度を変えます （0 ~ 1）
-shuffleStrength | Number | シャッフル回数を調整します（初期値：16）
+selector | String | パズル化する要素セレクタ（#id or .class）を指定
+col | Number | パズルの行数を設定
+row | Number | パズルの段数を設定
+enableAnimation | Boolean | スライド時のアニメーションを許可するかどうかを設定
+animateDuration | Number | スライドアニメーションのスピードを設定
+pieceOpacity | Number | マッチしていないピースの透明度を設定 （0 ~ 1）
+shuffleStrength | Number | シャッフル強度を設定、高いほど回数が増加（初期値：16）
 
 …TODO
 
@@ -68,30 +75,32 @@ shuffleStrength | Number | シャッフル回数を調整します（初期値�
 #### setGrid(rowNumber, colNumber)
 パズルの行数・列数を変更します。
 
-#### setImage(imageSrc | imageObject)
-画像をセットアップします。  
-これだけは非同期処理のため、promiseを返すことに注意。  
-引数としてimg要素を渡します。
+#### setImage(imageSrc || imgElement)
+画像を適用します。  
+非同期処理のため、これだけはpromiseを返すことに注意。  
+引数として適用したimg要素を受け取ることも出来ます。
 
 ```js
 // 画像セット直後にシャッフルしたい場合
-var img = "./assets/image/myCat.png"
-var puzzle = $.slidePuzzlize({});
+var img = "./assets/image/cat.jpg"
+var puzzle = $.slidePuzzlize();
 
 puzzle.setImage(img)
 .then(function(img) {
-  // パズルをシャッフル： コンテキストは維持されるので this === puzzle となります
+  // コンテキストは維持されるので this === puzzle となります
   this.resize(img.width/2, img.height/2); // 画像に合わせてサイズ変更
+  
+  // パズルをシャッフル：
   this.shuffle();
 });
 
 ```
 
 #### resize(width, height)
-パズルサイズを変更し、reset()を行います。
+パズル全体のサイズを変更し、reset()を行います。
 
 #### reset()
-パズルを直近のシャッフル直後にリセットします。
+パズルを直近のシャッフル直後の状態にリセットします。
 
 ### Events
 特定動作に応じて各種イベントを発火します。
@@ -106,12 +115,14 @@ puzzle.setImage(img)
 パズルが揃った時に発火
 
 ```js
-var img = "./assets/image/myCat.png";
+var img = "./assets/image/cat.jpg";
 var puzzle = $.slidePuzzlize({});
 
 puzzle.setImage(img)
 .then(function(img) {
   this.shuffle();
+
+  // 揃った時に"clear!"と表示
   this.on("match", function() {
     console.log('clear!')
   });
@@ -121,7 +132,7 @@ puzzle.setImage(img)
 
 ## Licence
 
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+[MIT](https://opensource.org/licenses/MIT)
 
 ## Author
 
