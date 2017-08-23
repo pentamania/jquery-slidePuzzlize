@@ -398,6 +398,7 @@
         image: new Image(),
 
         shuffle: function() {
+          initializeArray(puzzleArray, this.pieceNum);
           puzzleShuffle(puzzleArray, colNum, rowNum, this.pieceNum*shuffleStrength);
           _preservedArray = [].concat(puzzleArray);
           // console.log(puzzleArray, _preservedArray, puzzleArray === _preservedArray)
